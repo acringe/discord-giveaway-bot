@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
-const client = new Discord.Client();
+const Intents = Discord.Intents.FLAGS;
+const client = new Discord.Client({ intents: [ Intents.GUILDS, Intents.GUILD_MESSAGES ],  partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 let fs = require('fs');
 const PREFIX = "YOUR_DISCORD_BOT_PREFIX";
 const TOKEN = "YOUR_DISCORD_BOT_TOKEN";
@@ -14,7 +15,7 @@ for(const file of commandFiles) {
   client.commands.set(command.name, command);
 }
 
-client.on('message', async message => {
+client.on('messageCreate', async message => {
   if (message.content.startsWith(`PREFIX`)) {
     let file_name = `${message.content.split(' ')[0].replace(prefix, '')}.js`;
     if(!fs.existsSync('./commands/' + file_name)) return undefined;
